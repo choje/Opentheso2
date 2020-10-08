@@ -93,7 +93,7 @@
 
 
                         <!-- Langues -->
-                        <b:dropMenu value="#{langueBean.idLangue}"  style="font-size: 12px; margin-right: -10px;" >
+                        <b:dropMenu value="#{langueBean.idLangue.toUpperCase}"  style="font-size: 12px; margin-right: -10px;" >
                             <b:navCommandLink iconAwesome="flag fas_custom_flag" value="fr" action="#{langueBean.changeLangue('fr')}" ajax="false"
                                               style="font-size: 12px; background: none; border: none; color: #43B572;margin-left: -5px;"
                                               update="formMenu formLeftTab formSearch:languageSelect formSearch formRightTab containerIndex homePageForm">
