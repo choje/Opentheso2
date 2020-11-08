@@ -6,42 +6,27 @@
         <script src="auto-complete.js"></script>
         <script type="text/javascript" src="jquery-3.5.1.min.js"></script>
     </head>
+    
     <body>
-        <form onsubmit="return false;" class="pure-form" style="border-top: 1px solid #eee;border-bottom:1px solid #eee;background:#fafafa;margin:30px 0;padding:20px 10px;text-align:center">
-            <input id="hero-demo" autofocus type="text" name="q" placeholder="Programming languages ..." style="width:100%;max-width:600px;outline:0">
-        </form>
-        <script>
-            var thesaurus = 'TH_1';
-            var lang = 'fr';
-            var groupe = 6;
+        <form onsubmit="return false;" class="pure-form" style="border-top: 1px solid #eee; 
+              border-bottom:1px solid #eee; background:#fafafa; margin:30px 0; padding:20px 10px; text-align:center;">
             
+            <div id="autoComplete">
+                <div><input id="demoAutoComplete" type="text" name="q" placeholder="Titre ..." style="width:400px;" /></div>
+                <div><div id="loading" class="loader" style="visibility: hidden; margin-top: 3px; margin-left: 3px"/></div>
+            </div>
+                
+        </form>
+
+        <script>
             new autoComplete({
-                selector: '#hero-demo',
-                minChars: 1,
-                source: function (term, suggest) {
-                     
-                    $.ajax({
-                        url : 'https://cors-anywhere.herokuapp.com/https://pactols.frantiq.fr/opentheso/api/autocomplete/'+term
-                                +'?theso='+thesaurus+'&group='+groupe+'&lang='+lang,
-                        type : 'GET',
-                        dataType : 'html',
-                        success : function(arrayOfObjects){
-                            var suggestions = [];
-                            arrayOfObjects = JSON.parse(arrayOfObjects);
-                            for (var i = 0; i < arrayOfObjects.length; i++) {
-                                suggestions.push(arrayOfObjects[i].label);
-                            }
-                            suggest(suggestions);
-                        },
-
-                        error : function(resultat, statut, erreur){
-                            var suggestions = ["Erreur : " + erreur];
-                            suggest(suggestions);
-                        }
-
-                     })
-                }
+                selector: '#demoAutoComplete',
+                loading: 'loading',
+                thesaurus: 'TH_1',
+                lang: 'fr',
+                groupe: 6
             });
         </script>
+
     </body>
 </html>
