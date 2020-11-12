@@ -83,6 +83,10 @@ public class SelectedTheso implements Serializable {
 
     @PostConstruct
     public void initializing() {
+        if(!connect.isConnected()) {
+            System.err.println("Erreur de connexion BDD");
+            return;
+        }
         roleOnThesoBean.showListTheso();
         sortByNotation = false;
     }
@@ -176,7 +180,7 @@ public class SelectedTheso implements Serializable {
         searchBean.reset();
         viewEditorThesoHomeBean.reset();
         viewEditorHomeBean.reset();
-
+            treeGroups.reset();
         candidatBean.initCandidatModule();
 
         if (selectedIdTheso == null || selectedIdTheso.isEmpty()) {

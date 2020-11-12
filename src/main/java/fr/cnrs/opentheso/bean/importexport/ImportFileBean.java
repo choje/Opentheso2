@@ -139,7 +139,7 @@ public class ImportFileBean implements Serializable {
         if(currentUser.getNodeUser().isIsSuperAdmin()) {
             nodeUserProjects = userHelper.getAllProject(connect.getPoolConnexion());
         } else {
-            nodeUserProjects = userHelper.getProjectsOfUser(connect.getPoolConnexion(), currentUser.getNodeUser().getIdUser());
+            nodeUserProjects = userHelper.getProjectsOfUserAsAdmin(connect.getPoolConnexion(), currentUser.getNodeUser().getIdUser());
             for (NodeUserGroup nodeUserProject : nodeUserProjects) {
                 selectedUserProject = "" + nodeUserProject.getIdGroup();
             }
@@ -216,6 +216,7 @@ public class ImportFileBean implements Serializable {
 
         }
     }
+    
     
     /**
      * insérer un thésaurus dans la BDD (CSV)

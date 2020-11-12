@@ -21,8 +21,7 @@
         
         
         <!-- vue pulic non connectée -->
-        <b:panel  rendered="#{!(viewEditorThesoHomeBean.isInEditing)}" 
-                  style="font-size: 12px; border: none ">
+        <b:panel  rendered="#{!(viewEditorThesoHomeBean.isInEditing)}" style="border: none ">
             <b:row >
                 <b:column span="12">
                     <h:outputText value="total des concepts de " style="font-size: 12px;"/>
@@ -51,7 +50,7 @@
                 </b:column>
                 <b:column span="2" >
                     <b:commandButton 
-                        value="Vue plain texte" 
+                        value="Vue plein texte" 
                         class="btn btn-primary"
                         update="formRightTab thesoHomePageForm"
                         action="#{viewEditorThesoHomeBean.setViewPlainTextTo(true)}"
