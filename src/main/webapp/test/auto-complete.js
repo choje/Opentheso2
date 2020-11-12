@@ -37,15 +37,17 @@ var autoComplete = (function () {
         var o = {
             selector: 0,
             source: function (term, suggest) {
-                var urlWS = 'https://cors-anywhere.herokuapp.com/https://pactols.frantiq.fr/opentheso/api/autocomplete/' 
+                var urlWS = 'https://cors-anywhere.herokuapp.com/' + options.url 
                         + term + '?theso=' + options.thesaurus;
                 
                 if (options['groupe'] !== undefined) {
                     urlWS = urlWS + '&group=' + options['groupe'];
                 }
+                
                 if (options['lang'] !== undefined) {
                     urlWS = urlWS + '&lang=' + options['lang'];
                 }
+                
                 console.log(urlWS);
                 $.ajax({
                     url: urlWS,
@@ -237,9 +239,11 @@ var autoComplete = (function () {
             that.keyupHandler = function (e) {
                 
                 var selector = document.getElementById(options['selector'].substring(1)); 
-                if (selector.value.length >= o.minChars) {
-                    var element = document.getElementById(options['loading']); 
+                var element = document.getElementById(options['loading']);
+                if (selector.value.length >= o.minChars) { 
                     element.style.visibility='visible';
+                } else {
+                    element.style.visibility='hidden';
                 }
                 
                 var key = window.event ? e.keyCode : e.which;
