@@ -1,8 +1,8 @@
 
 var autoComplete = (function () {
-    
+
     function autoComplete(options) {
-        
+
         if (!document.querySelector)
             return;
 
@@ -16,14 +16,14 @@ var autoComplete = (function () {
             else
                 el.addEventListener(type, handler);
         }
-        
+
         function removeEvent(el, type, handler) {
             if (el.detachEvent)
                 el.detachEvent('on' + type, handler);
             else
                 el.removeEventListener(type, handler);
         }
-        
+
         function live(elClass, event, cb, context) {
             addEvent(context || document, event, function (e) {
                 var found, el = e.target || e.srcElement;
@@ -33,21 +33,32 @@ var autoComplete = (function () {
                     cb.call(el, e);
             });
         }
+        
+        const data = new Map();
 
         var o = {
             selector: 0,
             source: function (term, suggest) {
-                var urlWS = 'https://cors-anywhere.herokuapp.com/' + options.url 
-                        + term + '?theso=' + options.thesaurus;
                 
+                var selector = document.getElementById(options['selector'].substring(1));
+                var element = document.getElementById(options['loading']);
+                if (selector.value.length >= o.minChars) {
+                    element.style.visibility = 'visible';
+                } else {
+                    element.style.visibility = 'hidden';
+                }
+
+                var urlWS = 'https://cors-anywhere.herokuapp.com/' + options.url
+                        + term + '?theso=' + options.thesaurus;
+
                 if (options['groupe'] !== undefined) {
                     urlWS = urlWS + '&group=' + options['groupe'];
                 }
-                
+
                 if (options['lang'] !== undefined) {
                     urlWS = urlWS + '&lang=' + options['lang'];
                 }
-                
+
                 console.log(urlWS);
                 $.ajax({
                     url: urlWS,
@@ -64,20 +75,21 @@ var autoComplete = (function () {
                         } catch (error) {
                             suggestions.push("Erreur pendant la recherche des données...");
                         }
-                        var element = document.getElementById(options['loading']); 
-                        element.style.visibility='hidden';
+                        var element = document.getElementById(options['loading']);
+                        element.style.visibility = 'hidden';
                     },
 
                     error: function (resultat, statut, erreur) {
-                        var element = document.getElementById(options['loading']); 
-                        element.style.visibility='hidden';
+                        var element = document.getElementById(options['loading']);
+                        element.style.visibility = 'hidden';
                         var suggestions = ["Erreur pendant la recherche des données..."];
                         suggest(suggestions);
                     }
 
                 })
+
             },
-            minChars: 3,
+            minChars: 2,
             delay: 150,
             offsetLeft: 0,
             offsetTop: 1,
@@ -88,8 +100,9 @@ var autoComplete = (function () {
                 var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
                 var label = item.substring(0, item.indexOf(' ; '));
                 var uri = item.substring(item.indexOf(' ; ') + 3);
-                return '<div class="autocomplete-suggestion" data-val="' + label + '">' + label.replace(re, "<b>$1</b>") 
-                        + '<div style="font-size: 15px;font-style: italic;">'+uri+'</div></div>';
+                data.set(label, uri);
+                return '<div class="autocomplete-suggestion" data-val="' + label + '">' + label.replace(re, "<b>$1</b>")
+                        + '<div style="font-size: 15px;font-style: italic;">' + uri + '</div></div>';
             },
             onSelect: function (e, term, item) {}
         };
@@ -154,6 +167,9 @@ var autoComplete = (function () {
             }, that.sc);
 
             live('autocomplete-suggestion', 'mousedown', function (e) {
+                var element = document.getElementById(options['loading']);
+                element.style.visibility = 'hidden';
+                
                 if (hasClass(this, 'autocomplete-suggestion')) { // else outside click
                     var v = this.getAttribute('data-val');
                     that.value = v;
@@ -163,6 +179,11 @@ var autoComplete = (function () {
             }, that.sc);
 
             that.blurHandler = function () {
+                var element = document.getElementById(options['loading']);
+                element.style.visibility = 'hidden';
+                    
+                document.getElementById("output").innerHTML = data.get(that.value);
+                    
                 try {
                     var over_sb = document.querySelector('.autocomplete-suggestions:hover');
                 } catch (e) {
@@ -217,14 +238,10 @@ var autoComplete = (function () {
                     }
                     that.updateSC(0, next);
                     return false;
-                }
-                
-                else if (key == 27) {
+                } else if (key == 27) {
                     that.value = that.last_val;
                     that.sc.style.display = 'none';
-                }
-                
-                else if (key == 13 || key == 9) {
+                } else if (key == 13 || key == 9) {
                     var sel = that.sc.querySelector('.autocomplete-suggestion.selected');
                     if (sel && that.sc.style.display != 'none') {
                         o.onSelect(e, sel.getAttribute('data-val'), sel);
@@ -237,15 +254,7 @@ var autoComplete = (function () {
             addEvent(that, 'keydown', that.keydownHandler);
 
             that.keyupHandler = function (e) {
-                
-                var selector = document.getElementById(options['selector'].substring(1)); 
-                var element = document.getElementById(options['loading']);
-                if (selector.value.length >= o.minChars) { 
-                    element.style.visibility='visible';
-                } else {
-                    element.style.visibility='hidden';
-                }
-                
+
                 var key = window.event ? e.keyCode : e.which;
                 if (!key || (key < 35 || key > 40) && key != 13 && key != 27) {
                     var val = that.value;

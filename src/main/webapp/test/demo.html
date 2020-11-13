@@ -17,11 +17,14 @@
             </div>
                 
         </form>
+        
+        <p id="output"></p>
 
         <script>
             new autoComplete({
                 selector: '#demoAutoComplete',
                 loading: 'loading',
+                output: 'output',
                 url: 'https://pactols.frantiq.fr/opentheso/api/autocomplete/',
                 thesaurus: 'TH_1',
                 lang: 'fr',
