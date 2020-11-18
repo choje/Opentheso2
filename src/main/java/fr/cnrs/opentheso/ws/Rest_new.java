@@ -1588,7 +1588,6 @@ public class Rest_new {
         String idLang = "";
         String idTheso = null;
         String group = "";
-        String format = null;         
 
         for (Map.Entry<String, List<String>> e : uri.getQueryParameters().entrySet()) {
             for (String valeur : e.getValue()) {
@@ -1601,9 +1600,6 @@ public class Rest_new {
                 if (e.getKey().equalsIgnoreCase("group")) {
                     group = valeur;
                 }
-                if (e.getKey().equalsIgnoreCase("format")) {
-                    format = valeur;
-                }                 
             }
         }
         if (idTheso == null) {
@@ -1612,13 +1608,8 @@ public class Rest_new {
         if (value == null || value.isEmpty()) {
             return Response.status(Status.BAD_REQUEST).entity(messageEmptySkos()).type(MediaType.APPLICATION_XML).build();
         }
-        
-        String datas;
-        if(format != null && format.equalsIgnoreCase("full"))
-            datas = getAutocompleteDatas(idTheso, idLang, group, value, true);
-        else 
-            datas = getAutocompleteDatas(idTheso, idLang, group, value, false);
-        
+
+        String datas = getAutocompleteDatas(idTheso, idLang, group, value);
         if (datas == null) {
             return Response.status(Status.NO_CONTENT).entity(messageEmptyJson()).type(MediaType.APPLICATION_JSON).build();
         }
@@ -1630,9 +1621,9 @@ public class Rest_new {
      * Omeka-S Permet de rechercher une valeur en filtrant par theso et par
      * langue retourne une liste des valeurs (prefLabel + Uri) pour les
      * programmes qui font de l'autocompletion exp :
-     * http://localhost:8080/opentheso/api/autocomplete?theso=TH_1&value=vase&lang=fr&group=6
-     * le format : pour définir s'il faut renvoyer plus des données (définition ....)
-     * @param uri JSON
+     * http://193.48.140.131:8083/opentheso/api/autocomplete?theso=TH_1&value=vase&lang=fr&group=6
+     *
+     * @param uri JSON+Ld
      * @return
      */
     @Path("/autocomplete")
@@ -1643,7 +1634,6 @@ public class Rest_new {
         String value = null;
         String idTheso = null;
         String group = "";
-        String format = null;        
 
         for (Map.Entry<String, List<String>> e : uri.getQueryParameters().entrySet()) {
             for (String valeur : e.getValue()) {
@@ -1659,9 +1649,6 @@ public class Rest_new {
                 if (e.getKey().equalsIgnoreCase("group")) {
                     group = valeur;
                 }
-                if (e.getKey().equalsIgnoreCase("format")) {
-                    format = valeur;
-                }                
             }
         }
         if (value == null) {
@@ -1670,29 +1657,24 @@ public class Rest_new {
         if (idTheso == null) {
             return Response.status(Status.BAD_REQUEST).entity(messageEmptyJson()).type(MediaType.APPLICATION_JSON).build();
         }
-        
-        String datas;
-        if(format != null && format.equalsIgnoreCase("full"))
-            datas = getAutocompleteDatas(idTheso, idLang, group, value, true);
-        else 
-            datas = getAutocompleteDatas(idTheso, idLang, group, value, false);
-        
+
+        String datas = getAutocompleteDatas(idTheso, idLang, group, value);
         if (datas == null) {
             return Response.status(Status.NO_CONTENT).entity(messageEmptyJson()).type(MediaType.APPLICATION_JSON).build();
         }
         return Response.status(Response.Status.ACCEPTED).entity(datas).type(MediaType.APPLICATION_JSON).build();
     }
-    
+
     private String getAutocompleteDatas(String idTheso,
             String idLang, String group,
-            String value, boolean withNotes) {
+            String value) {
         HikariDataSource ds = connect();
         if (ds == null) {
             return null;
         }
         RestRDFHelper restRDFHelper = new RestRDFHelper();
         String datas = restRDFHelper.findAutocompleteConcepts(ds,
-                idTheso, idLang, group, value, withNotes);
+                idTheso, idLang, group, value);
         ds.close();
         if (datas == null) {
             return null;

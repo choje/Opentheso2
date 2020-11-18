@@ -398,15 +398,14 @@ public class RestRDFHelper {
      * @param lang 
      * @param group 
      * @param value 
-     * @param withNotes 
      * @return  
      */
     public String findAutocompleteConcepts(HikariDataSource ds,
             String idTheso, String lang, String group,
-            String value, boolean withNotes) {
+            String value) {
 
         String datas = findAutocompleteConcepts__(ds,
-                 value, idTheso, lang, group, withNotes);
+                 value, idTheso, lang, group);
         if(datas == null) return null;
         return datas;
     }    
@@ -423,7 +422,7 @@ public class RestRDFHelper {
     private String findAutocompleteConcepts__(
             HikariDataSource ds,
             String value, String idTheso,
-            String lang, String group, boolean withNotes) {
+            String lang, String group) {
 
         if(value == null || idTheso == null) {
             return null;
@@ -440,18 +439,14 @@ public class RestRDFHelper {
         
         
         // recherche de toutes les valeurs
-        nodeAutoCompletion = searchHelper.searchAutoCompletionWS(ds, value, lang, group, idTheso, withNotes);
+        nodeAutoCompletion = searchHelper.searchAutoCompletionWS(ds, value, lang, group, idTheso);
         
         if(nodeAutoCompletion == null || nodeAutoCompletion.isEmpty())
             return null;
 
         for (NodeAutoCompletion nodeAutoCompletion1 : nodeAutoCompletion) {
             uri = getUri(nodePreference, nodeAutoCompletion1, idTheso);
-            if(withNotes)
-                jsonHelper.addJsonDataFull(uri, nodeAutoCompletion1.getPrefLabel(), 
-                        nodeAutoCompletion1.getDefinition(), nodeAutoCompletion1.isIsAltLabel());
-            else
-                jsonHelper.addJsonData(uri, nodeAutoCompletion1.getPrefLabel());
+            jsonHelper.addJsonData(uri, nodeAutoCompletion1.getPrefLabel());
         }
         JsonArray datasJson = jsonHelper.getBuilder();
         if(datasJson != null)
