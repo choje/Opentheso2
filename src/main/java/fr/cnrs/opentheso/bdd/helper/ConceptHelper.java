@@ -6271,7 +6271,7 @@ public class ConceptHelper {
         if (concept == null) {
             return null;
         }
-        if(concept.getStatus().equalsIgnoreCase("dep")) {
+        if("dep".equalsIgnoreCase(concept.getStatus())) {
             concept.setIsDeprecated(true);
         }
         nodeConcept.setConcept(concept);

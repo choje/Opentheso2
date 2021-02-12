@@ -14,6 +14,8 @@ import fr.cnrs.opentheso.bean.rightbody.viewconcept.ConceptView;
 import fr.cnrs.opentheso.bean.rightbody.viewhome.ViewEditorHomeBean;
 import fr.cnrs.opentheso.bean.rightbody.viewhome.ViewEditorThesoHomeBean;
 import fr.cnrs.opentheso.bean.search.SearchBean;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.annotation.PostConstruct;
@@ -290,7 +292,7 @@ public class SelectedTheso implements Serializable {
      * Pour sélectionner un thésaurus ou un concept en passant par l'URL
      * @return 
      */
-    public String preRenderView() {
+    public String preRenderView() throws IOException {
         if (idThesoFromUri == null) {
             return "";
         }

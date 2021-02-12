@@ -6,7 +6,6 @@
 package fr.cnrs.opentheso.bean.menu.users;
 
 import fr.cnrs.opentheso.bdd.helper.UserHelper;
-import fr.cnrs.opentheso.bdd.helper.nodes.NodeIdValue;
 import fr.cnrs.opentheso.bdd.helper.nodes.NodeUser;
 import fr.cnrs.opentheso.bdd.helper.nodes.NodeUserRoleGroup;
 import fr.cnrs.opentheso.bdd.tools.MD5Password;
@@ -14,6 +13,8 @@ import fr.cnrs.opentheso.bean.index.IndexSetting;
 import fr.cnrs.opentheso.bean.menu.connect.Connect;
 import fr.cnrs.opentheso.bean.menu.theso.RoleOnThesoBean;
 import fr.cnrs.opentheso.bean.rightbody.viewhome.ViewEditorHomeBean;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.inject.Named;
@@ -61,7 +62,7 @@ public class CurrentUser implements Serializable {
         this.password = password;
     }
 
-    public void disconnect() {
+    public void disconnect() throws IOException {
         FacesMessage facesMessage;
         facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Goodbye", nodeUser.getName());
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -99,7 +100,7 @@ public class CurrentUser implements Serializable {
      * motpasstemp (et nous sommes dirigées a la page web de changer le
      * motpasstemp) #MR
      */
-    public void login() {
+    public void login() throws IOException {
         UserHelper userHelper = new UserHelper();
         FacesMessage facesMessage;
         
