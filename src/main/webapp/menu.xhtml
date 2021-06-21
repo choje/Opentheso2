@@ -74,8 +74,8 @@
                         <!-- liste des thésaurus -->                 
                         <b:navLink style="height: 30px; margin-top: -3px; margin-right: -10px;">
                             <p:selectOneMenu id="idListTheso" value="#{selectedTheso.selectedIdTheso}"
-                                 style="font-size: 12px;  width: 180px; color: #43B572"
-                                 panelStyle="font-size: 12px;  border: none; box-shadow: none;">
+                                 style="font-size: 12px;  width: 180px; "
+                                 panelStyle="font-size: 12px;  border: none; box-shadow: none;color: #43B572">
                                 <p:ajax event="valueChange" update="containerIndex candidatForm formMenu"
                                              listener="#{selectedTheso.setSelectedTheso()}" />
                                 <f:selectItem itemLabel="(#{langueBean.getMsg('menu.select_thesaurus')})" itemValue=""/>
@@ -92,14 +92,14 @@
 
                         <!--Not connected-->
                         <b:navCommandLink rendered="#{currentUser.nodeUser == null}"
-                                          tooltip="#{langueBean.getMsg('menu.login')}" icon-awesome="fa-key"  icon-size="l"
-                                          oncomplete="PF('login').show();" style="color: #FFFFFF"
+                                          tooltip="#{langueBean.getMsg('menu.login')}" icon-awesome="fa-key"  icon-size="l" style="color: #FFFFFF;"
+                                          oncomplete="PF('login').show();" 
                                           styleClass="buttonIconOrange"
                                           update="idLogin loginForm"/>
 
                         <!--is connected-->
                         <b:navCommandLink rendered="#{currentUser.nodeUser != null}" tooltip="#{currentUser.nodeUser.name} !! #{langueBean.getMsg('menu.logout')}"
-                                          icon-awesome="fa-sign-out" icon-size="l" style="color: #FFFFFF;"
+                                          icon-awesome="fa-sign-out" icon-size="l" style="color: #C63632;"
                                           ajax="true" action="#{currentUser.disconnect()}"/>
 
 
