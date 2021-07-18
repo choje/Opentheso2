@@ -6,6 +6,9 @@
 
 package fr.cnrs.opentheso.bdd.helper.nodes;
 
+import javax.faces.context.FacesContext;
+import java.util.ResourceBundle;
+
 /**
  *
  * @author miled.rousset
@@ -56,7 +59,37 @@ public class NodeImage {
     }
 
     public String getUri() {
-        return uri;
+        if (uri.startsWith("http")) {
+            return uri;
+        } else {
+            FacesContext context = FacesContext.getCurrentInstance();
+            try {
+                ResourceBundle bundlePool = context.getApplication().getResourceBundle(context, "conHikari");
+                if(bundlePool == null){
+                    return null;
+                }
+
+                //{scheme}://{server}{/prefix}/{identifier}/{region}/{size}/{rotation}/{quality}.{format}
+                return new StringBuffer(bundlePool.getString("iiif.serverName"))
+                        .append("/")
+                        .append(bundlePool.getString("iiif.prefix"))
+                        .append("/")
+                        .append(uri)
+                        .append("/")
+                        .append(bundlePool.getString("iiif.region"))
+                        .append("/")
+                        .append(bundlePool.getString("iiif.size"))
+                        .append("/")
+                        .append(bundlePool.getString("iiif.rotation"))
+                        .append("/")
+                        .append(bundlePool.getString("iiif.quality"))
+                        .append(".")
+                        .append(bundlePool.getString("iiif.format"))
+                        .toString();
+            } catch (Exception e) {
+                return null;
+            }
+        }
     }
 
     public void setUri(String uri) {

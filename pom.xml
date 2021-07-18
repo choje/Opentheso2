@@ -191,6 +191,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>de.digitalcollections.iiif</groupId>
+            <artifactId>iiif-apis</artifactId>
+            <version>0.3.8</version>
+        </dependency>
+
     </dependencies>
 
     <build>
