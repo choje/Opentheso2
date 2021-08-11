@@ -24,4 +24,4 @@ services:
 
 volumes:
   opentheso-pgdata:
-    external: false
+    external: true
