@@ -96,12 +96,13 @@ function update(source) {
         return d.id || (d.id = ++i);
     });
 
-
     var tooltip = d3.select("body")
             .append("div")
             .style("position", "absolute")
             .style("z-index", "10")
             .style("visibility", "hidden");
+
+    var radius = 4.5;
 
     var nodeEnter = node.enter().append("g")
             .attr("class", "node")
@@ -138,13 +139,6 @@ function update(source) {
                 return tooltip.style("visibility", "hidden");
             });
 
-    nodeEnter.append("circle")
-            .attr("r", 1e-6)
-            .on("click", click)
-            .style("fill", function (d) {
-                return d._children ? "#43B572" : "#fff";
-            });
-
     nodeEnter.append("text")
             .attr("x", function (d) {
                 return d.children || d._children ? -10 : 10;
@@ -154,6 +148,17 @@ function update(source) {
                 return d.children || d._children ? "end" : "start";
             })
             .text(function (d) {
+                if (typeof variable !== 'undefined') {
+                    if (d.poids < 20)
+                        radius = 4;
+                    else if (d.poids < 40)
+                        radius = 8;
+                    else if (d.poids < 40)
+                        radius = 12;
+                    else
+                        radius = 16;
+                }
+
                 return d.name;
             })
             .on('click', function (d) {
@@ -161,6 +166,12 @@ function update(source) {
             })
             .style("fill-opacity", 1e-6);
 
+    nodeEnter.append("circle")
+        .attr("r", radius)
+        .on("click", click)
+        .style("fill", function (d) {
+            return d._children ? "#43B572" : "#fff";
+        });
 
     var nodeUpdate = node.transition()
             .duration(duration)
@@ -169,7 +180,7 @@ function update(source) {
             });
 
     nodeUpdate.select("circle")
-            .attr("r", 4.5)
+            .attr("r", radius)
             .style("fill", function (d) {
                 return d._children ? "#43B572" : "#fff";
             });
