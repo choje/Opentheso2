@@ -17,40 +17,18 @@ import javax.ws.rs.core.Response;
 
 
 public final class ArkClientRest extends AbstractArkClient{
-//    private Properties propertiesArk;
-//    private Client client;
-    
-//    private String idArk;
+
     private String idHandle;
-//    private String Uri;
-    
-    
+
     // prefix MOM
     private String prefixHandle = "20.500.11859";
     
     private String urlHandle = "http://193.48.137.68:8000/api/handles/";
-//    private String jsonArk;
-    
-//    private JsonObject loginJson;
-    
-//    private String token;
-    
-//    private String message;
-    
-    
+
     public ArkClientRest() {
         super(null);
     }
-//
-//    /**
-//     * defition des propriétés du serveur Ark
-//     * @param propertiesArk
-//     * #MR
-//     */
-//    public void setPropertiesArk(Properties propertiesArk) {
-//        this.propertiesArk = propertiesArk;
-//    }
-    
+
     
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -560,32 +538,5 @@ public final class ArkClientRest extends AbstractArkClient{
         return idHandle;
     }
     
-//    public String getIdArk() {
-//        return idArk;
-//    }
-//
-//    public String getUri() {
-//        return Uri;
-//    }
-//
-//    public String getMessage() {
-//        return message;
-//    }
-//
-//    public JsonObject getLoginJson() {
-//        return loginJson;
-//    }
-//
-//    public void setLoginJson(JsonObject loginJson) {
-//        this.loginJson = loginJson;
-//    }
-//
-//    public String getToken() {
-//        return token;
-//    }
-//
-//    public void setToken(String token) {
-//        this.token = token;
-//    }
     
 }
