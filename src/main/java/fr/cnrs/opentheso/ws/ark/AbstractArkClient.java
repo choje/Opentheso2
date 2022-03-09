@@ -1,7 +1,6 @@
 package fr.cnrs.opentheso.ws.ark;
 
 import org.reflections.Reflections;
-
 import javax.json.JsonObject;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
@@ -13,19 +12,10 @@ public abstract class AbstractArkClient {
     public static Class DEFAULT_CLIENT_CLASS = ArkClientRest.class;
     protected Properties propertiesArk;
     protected String idArk;
-//    private String idHandle;
     protected String Uri;
-//
-//    // prefix MOM
-//    private String prefixHandle = "20.500.11859";
-
-//    private String urlHandle = "http://193.48.137.68:8000/api/handles/";
     protected String jsonArk;
-
     protected JsonObject loginJson;
-
     protected String token;
-
     protected String message;
 
 
@@ -37,14 +27,11 @@ public abstract class AbstractArkClient {
         this.propertiesArk = props;
     }
 
-
     public void setPropertiesArk(Properties propertiesArk) {
         this.propertiesArk = propertiesArk;
     }
 
     public abstract boolean login();
-
-    //protected abstract void getTokenFromString(String tokenString);
 
     public abstract boolean getArk(String ark);
 
@@ -85,7 +72,7 @@ public abstract class AbstractArkClient {
     }
 
 
-    //@todo: à externaliser
+    //@todo: to externalize ?
     public abstract boolean deleteHandle(String s);
     public abstract boolean isHandleExist(String idHandle);
     public abstract String getIdHandle();
@@ -119,65 +106,7 @@ public abstract class AbstractArkClient {
                 return new ArkClientRest();
             }
         }
-
-
-        //    /**
-//     * Gets Available Ark client Types list
-//     * @return
-//     */
-//    public List<AbstractArkClient.ArkServerType> getArkServerClasses(){
-//        if(this.arkServerClasses == null){
-//            arkServerClasses = new ArrayList<>();
-//            Reflections reflections = new Reflections("fr.cnrs.opentheso.ws.ark");
-//            Set<Class<? extends AbstractArkClient>> allClasses =
-//                    reflections.getSubTypesOf(AbstractArkClient.class);
-//            for(Class c : allClasses){
-//                this.arkServerClasses.add(new AbstractArkClient.ArkServerType(c));
-//            }
-//            this.arkServerClasses.sort((a, b) ->
-//                    a.getServerClientClass().equals(AbstractArkClient.ArkServerType.DEFAULT_TYPE) ? -1 : 1);
-//        }
-//        return this.arkServerClasses;
-//    }
     }
 
 
-//    /**
-//     * Ark server client wrapper
-//     */
-//    public static class ArkServerType{
-//        public static Class DEFAULT_TYPE = ArkClientRest.class;
-//        private Class serverClientClass;
-//        private String prettyString;
-//
-//        public ArkServerType(Class c){
-//            this.serverClientClass = c;
-//            this.prettyString = this.findPrettyString();
-//        }
-//
-//        public String toString(){
-//            return this.prettyString;
-//        }
-//
-//        public Class getServerClientClass(){
-//            return this.serverClientClass;
-//        }
-//
-//        private String findPrettyString(){
-//            Constructor[] ctors  = this.serverClientClass.getDeclaredConstructors();
-//            Constructor ctor = null;
-//            for (int i = 0; i < ctors.length; i++) {
-//                ctor = ctors[i];
-//                if (ctor.getGenericParameterTypes().length == 0)
-//                    break;
-//            }
-//            try {
-//                Object o = ctor.newInstance();
-//                return o.toString();
-//            }
-//            catch(Exception e){
-//                return null;
-//            }
-//        }
-//    }
 }
