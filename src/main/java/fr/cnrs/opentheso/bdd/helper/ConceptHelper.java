@@ -1744,7 +1744,7 @@ public class ConceptHelper {
      */
     public boolean updateArkId(HikariDataSource ds, String idTheso, String idConcept, String idArk) {
 
-        ArkHelper arkHelper = new ArkHelper(nodePreference);
+        ArkHelper2 arkHelper = new ArkHelper2(nodePreference);
         if (!arkHelper.login()) {
             return false;
         }

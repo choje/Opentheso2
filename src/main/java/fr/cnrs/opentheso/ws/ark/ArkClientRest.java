@@ -16,39 +16,40 @@ import javax.ws.rs.core.Response;
 //import org.primefaces.shaded.json.JSONObject;
 
 
-public final class ArkClientRest {
-    private Properties propertiesArk;  
+public final class ArkClientRest extends AbstractArkClient{
+//    private Properties propertiesArk;
 //    private Client client;
     
-    private String idArk;
+//    private String idArk;
     private String idHandle;
-    private String Uri;
+//    private String Uri;
     
     
     // prefix MOM
     private String prefixHandle = "20.500.11859";
     
     private String urlHandle = "http://193.48.137.68:8000/api/handles/";
-    private String jsonArk;
+//    private String jsonArk;
     
-    private JsonObject loginJson;
+//    private JsonObject loginJson;
     
-    private String token;
+//    private String token;
     
-    private String message;
+//    private String message;
     
     
     public ArkClientRest() {
+        super(null);
     }
-   
-    /**
-     * defition des propriétés du serveur Ark
-     * @param propertiesArk 
-     * #MR
-     */
-    public void setPropertiesArk(Properties propertiesArk) {
-        this.propertiesArk = propertiesArk;
-    }    
+//
+//    /**
+//     * defition des propriétés du serveur Ark
+//     * @param propertiesArk
+//     * #MR
+//     */
+//    public void setPropertiesArk(Properties propertiesArk) {
+//        this.propertiesArk = propertiesArk;
+//    }
     
     
 ////////////////////////////////////////////////////////////////////
@@ -106,7 +107,7 @@ public final class ArkClientRest {
      * @return 
      */
     public boolean getArk(String ark) {
-        Client client= ClientBuilder.newClient();  
+        Client client= ClientBuilder.newClient();
         
         String idArk1 = ark.substring(ark.indexOf("/")+1);
         String naan = ark.substring(0, ark.indexOf("/"));
@@ -215,7 +216,7 @@ public final class ArkClientRest {
         message = "Erreur de format";
         return false; 
     }    
-    
+
     /**
      * permet de mettre à jour un abjet Ark 
      * @param arkString
@@ -280,7 +281,11 @@ public final class ArkClientRest {
             return false;            
         } 
         return setForUriUpdate();
-    }      
+    }
+
+    public String toString(){
+        return "Arkeo / Défaut";
+    }
     
  ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -555,32 +560,32 @@ public final class ArkClientRest {
         return idHandle;
     }
     
-    public String getIdArk() {
-        return idArk;
-    }
-
-    public String getUri() {
-        return Uri;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public JsonObject getLoginJson() {
-        return loginJson;
-    }
-
-    public void setLoginJson(JsonObject loginJson) {
-        this.loginJson = loginJson;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
+//    public String getIdArk() {
+//        return idArk;
+//    }
+//
+//    public String getUri() {
+//        return Uri;
+//    }
+//
+//    public String getMessage() {
+//        return message;
+//    }
+//
+//    public JsonObject getLoginJson() {
+//        return loginJson;
+//    }
+//
+//    public void setLoginJson(JsonObject loginJson) {
+//        this.loginJson = loginJson;
+//    }
+//
+//    public String getToken() {
+//        return token;
+//    }
+//
+//    public void setToken(String token) {
+//        this.token = token;
+//    }
     
 }

@@ -125,7 +125,7 @@
         <dependency>
             <groupId>SPARQL-JAVA</groupId>
             <artifactId>SPARQL-JAVA</artifactId>
-            <version>${sparql.version}</version>
+            <version>1.0</version>
             <type>jar</type>
         </dependency>
 
@@ -225,6 +225,13 @@
             <artifactId>jena-arq</artifactId>
             <version>4.1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+
 
     </dependencies>
 
