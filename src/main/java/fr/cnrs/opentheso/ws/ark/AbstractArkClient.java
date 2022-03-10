@@ -1,15 +1,15 @@
 package fr.cnrs.opentheso.ws.ark;
-
-import org.reflections.Reflections;
 import javax.json.JsonObject;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.ResourceBundle;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public abstract class AbstractArkClient {
 
-    public static Class DEFAULT_CLIENT_CLASS = ArkClientRest.class;
     protected Properties propertiesArk;
     protected String idArk;
     protected String Uri;
@@ -18,12 +18,33 @@ public abstract class AbstractArkClient {
     protected String token;
     protected String message;
 
+    private static String arkClientClass;
 
-    public AbstractArkClient(){
+    private static final String ARK_CLIENT_CLASS_PROPERTY = "arkClientClass";
+    private static final String DEFAULT_ARK_CLIENT_CLASS = ArkClientRest.class.toString();
+
+
+    static {
+        try {
+            ResourceBundle rd
+                    = ResourceBundle.getBundle("preferences");
+            if (rd.containsKey(ARK_CLIENT_CLASS_PROPERTY))
+                arkClientClass = rd.getString("arkClientClass");
+            else
+                arkClientClass = DEFAULT_ARK_CLIENT_CLASS;
+            Logger.getLogger(AbstractArkClient.class.getName()).log(Level.INFO, "ARK CLIENT CLASS = " + arkClientClass);
+        } catch (Exception e) {
+            arkClientClass = DEFAULT_ARK_CLIENT_CLASS;
+        }
+
+    }
+
+
+    public AbstractArkClient() {
         this.propertiesArk = null;
     }
 
-    public AbstractArkClient(Properties props){
+    public AbstractArkClient(Properties props) {
         this.propertiesArk = props;
     }
 
@@ -74,7 +95,9 @@ public abstract class AbstractArkClient {
 
     //@todo: to externalize ?
     public abstract boolean deleteHandle(String s);
+
     public abstract boolean isHandleExist(String idHandle);
+
     public abstract String getIdHandle();
 
 
@@ -83,26 +106,25 @@ public abstract class AbstractArkClient {
         /**
          * ArkClient Factory. Returns first AbstractArkClient subclass (different than the default one = ArkClientRest) if exists.
          * The default one (ArkClientRest) is instanciated and returned if such client does not exist.
+         *
          * @return
          */
-        public static AbstractArkClient buildArkClient(){
-            Reflections reflections = new Reflections("fr.cnrs.opentheso.ws.ark");
-            Set<Class<? extends AbstractArkClient>> allClasses = reflections.getSubTypesOf(AbstractArkClient.class);
-            Set<Class<? extends AbstractArkClient>> filteredClasses =
-                    allClasses.stream().filter(client -> !client.getClass().equals(DEFAULT_CLIENT_CLASS)).collect(Collectors.toSet());
-            Class clientClass = filteredClasses.toArray(new Class[0])[0];
-            Constructor[] ctors  = clientClass.getDeclaredConstructors();
-            Constructor<AbstractArkClient> ctor = null;
-            for (int i = 0; i < ctors.length; i++) {
-                ctor = ctors[i];
-                if (ctor.getGenericParameterTypes().length == 0)
-                    break;
-            }
+        public static AbstractArkClient buildArkClient() {
             try {
+
+                Class clientClass = Class.forName(arkClientClass);
+                Constructor[] ctors = clientClass.getDeclaredConstructors();
+                Constructor<AbstractArkClient> ctor = null;
+                for (int i = 0; i < ctors.length; i++) {
+                    ctor = ctors[i];
+                    if (ctor.getGenericParameterTypes().length == 0)
+                        break;
+                }
                 AbstractArkClient clientInstance = ctor.newInstance();
+                Logger.getLogger(AbstractArkClient.class.getName()).log(Level.SEVERE, "clientInstance - " + clientInstance.getClass().getName());
                 return clientInstance;
-            }
-            catch(Exception e){
+            } catch (Exception e) {
+                 Logger.getLogger(AbstractArkClient.class.getName()).log(Level.SEVERE, e.getMessage());
                 return new ArkClientRest();
             }
         }

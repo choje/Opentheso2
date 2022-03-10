@@ -13,7 +13,6 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-//import org.primefaces.shaded.json.JSONObject;
 
 
 public final class ArkClientRest extends AbstractArkClient{
@@ -537,6 +536,6 @@ public final class ArkClientRest extends AbstractArkClient{
     public String getIdHandle() {
         return idHandle;
     }
-    
+
     
 }

@@ -22,24 +22,22 @@ public class ArkHelper2 {
     
     private String idArk;
     private String idHandle;
-    private ArkClientRest arkClientRest;
-    
+    private AbstractArkClient arkClient;
     public ArkHelper2(NodePreference nodePreference) {
         this.nodePreference = nodePreference;
     }
     
     public boolean login() {
-        //initialisation des valeurs 
-        arkClientRest = new ArkClientRest();
-
+        //initialisation des valeurs
         Properties propertiesArk = new Properties();
         propertiesArk.setProperty("serverHost", nodePreference.getServeurArk());//"http://localhost:8082/Arkeo");//"https://ark.mom.fr/Arkeo");
         propertiesArk.setProperty("idNaan", nodePreference.getIdNaan());
         propertiesArk.setProperty("user", nodePreference.getUserArk());
         propertiesArk.setProperty("password", nodePreference.getPassArk());
-        arkClientRest.setPropertiesArk(propertiesArk);    
+        arkClient = AbstractArkClient.ArkClientFactory.buildArkClient();//new UnicaenArkClient(propertiesArk);
+        arkClient.setPropertiesArk(propertiesArk);
         try {
-            return arkClientRest.login();
+            return arkClient.login();
         } catch (Exception e) {
             return false;
         }
@@ -47,12 +45,12 @@ public class ArkHelper2 {
     }
     
     public boolean isArkExistOnServer(String idArk) {
-        return  arkClientRest.isArkExist(idArk);
+        return  arkClient.isArkExist(idArk);
     }
     
     
     public boolean isHandleExistOnServer(String idHandle) {
-        return arkClientRest.isHandleExist(idHandle);
+        return arkClient.isHandleExist(idHandle);
     }
     
     /**
@@ -88,18 +86,18 @@ public class ArkHelper2 {
 //        nodeJson2.setHandle_prefix("20.500.11859");
        
         // récupération du Token
-        if(arkClientRest.getLoginJson() == null) return false;
+        if(arkClient.getLoginJson() == null) return false;
 
-        String token = arkClientRest.getToken();
+        String token = arkClient.getToken();
         nodeJson2.setToken(token);
        
         // création de l'identifiant Ark et Handle 
         String jsonDatas = nodeJson2.getJsonString();
         if(jsonDatas == null) return false;
-        if(!arkClientRest.addArk(jsonDatas)) return false;        
+        if(!arkClient.addArk(jsonDatas)) return false;
         
-        idArk = arkClientRest.getIdArk();
-        idHandle = arkClientRest.getIdHandle();
+        idArk = arkClient.getIdArk();
+        idHandle = arkClient.getIdHandle();
         if (idArk == null) {
             message = "La connexion Ark a échouée";
             return false;
@@ -122,10 +120,10 @@ public class ArkHelper2 {
         idArk = null;
         idHandle = null;
         
-        if(!arkClientRest.getArk(ark)) return false;
+        if(!arkClient.getArk(ark)) return false;
 
-        idArk = arkClientRest.getIdArk();
-        idHandle = arkClientRest.getIdHandle();
+        idArk = arkClient.getIdArk();
+        idHandle = arkClient.getIdHandle();
         if (idArk == null) {
             message = "Erreur Ark !!";
             return false;
@@ -166,21 +164,21 @@ public class ArkHelper2 {
         nodeJson2.setUseHandle(nodePreference.isGenerateHandle());
         
         // récupération du Token
-        if(arkClientRest.getLoginJson() == null) return false;
+        if(arkClient.getLoginJson() == null) return false;
     
-        String token = arkClientRest.getToken();
+        String token = arkClient.getToken();
         nodeJson2.setToken(token);
 
         // création de l'identifiant Ark et Handle 
         String jsonDatas = nodeJson2.getJsonString();
         if(jsonDatas == null) return false;
-        if(!arkClientRest.addArk(jsonDatas)){
-            message = message + arkClientRest.getMessage();
+        if(!arkClient.addArk(jsonDatas)){
+            message = message + arkClient.getMessage();
             return false;
         }
 
-        idArk = arkClientRest.getIdArk();
-        idHandle = arkClientRest.getIdHandle();
+        idArk = arkClient.getIdArk();
+        idHandle = arkClient.getIdHandle();
         if (idArk == null) {
             message = "La connexion Ark a échouée";
             return false;
@@ -223,19 +221,19 @@ public class ArkHelper2 {
         nodeJson2.setNaan(nodePreference.getIdNaan());
         nodeJson2.setUseHandle(nodePreference.isGenerateHandle());
        
-        String token = arkClientRest.getToken();
+        String token = arkClient.getToken();
         nodeJson2.setToken(token);        
 
         // mise à jour de Ark et Handle 
         String jsonDatas = nodeJson2.getJsonString();
         if(jsonDatas == null) return false;        
         
-        if(!arkClientRest.updateArk(nodeJson2.getJsonString())) {
-            message = message + arkClientRest.getMessage();
+        if(!arkClient.updateArk(nodeJson2.getJsonString())) {
+            message = message + arkClient.getMessage();
             return false;
         }
 
-        idHandle = arkClientRest.getIdHandle();
+        idHandle = arkClient.getIdHandle();
 
         if(nodePreference.isGenerateHandle()) {        
             if (idHandle == null) {
@@ -267,14 +265,14 @@ public class ArkHelper2 {
         nodeJson2.setArk(idArk);
         nodeJson2.setNaan(nodePreference.getIdNaan());
         nodeJson2.setUseHandle(nodePreference.isGenerateHandle());
-        String token = arkClientRest.getToken();
+        String token = arkClient.getToken();
         nodeJson2.setToken(token);        
 
         String jsonDatas = nodeJson2.getJsonUriString();
         if(jsonDatas == null) return false;        
         
-        if(!arkClientRest.updateUriArk(nodeJson2.getJsonString())) {
-            message = message + arkClientRest.getMessage();
+        if(!arkClient.updateUriArk(nodeJson2.getJsonString())) {
+            message = message + arkClient.getMessage();
             System.out.println(message);
             return false;
         }
@@ -334,11 +332,11 @@ public class ArkHelper2 {
         nodeJson.setHandle_prefix("20.500.11859");
        
         // création de l'identifiant Ark et Handle 
-        if(!arkClientRest.deleteHandle(nodeJson.getJsonString())) {
-            message = arkClientRest.getMessage();
+        if(!arkClient.deleteHandle(nodeJson.getJsonString())) {
+            message = arkClient.getMessage();
             return false;
         }
-        message = arkClientRest.getMessage();
+        message = arkClient.getMessage();
         return true;
     }        
     
